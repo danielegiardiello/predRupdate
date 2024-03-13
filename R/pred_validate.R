@@ -24,6 +24,8 @@
 #'   match a time in x$cum_hazard.
 #' @param cal_plot indicate if a flexible calibration plot should be produced
 #'   (TRUE) or not (FALSE).
+#' @param dcurve indicate if a decision curve should be produced
+#'   (TRUE) or not (FALSE)
 #' @param ... further plotting arguments for the calibration plot. See Details
 #'   below.
 #'
@@ -92,6 +94,10 @@
 #'   \code{pred_rug} as TRUE; this can be used to show the predicted risk
 #'   distribution by outcome status.
 #'
+#'   In addition, a decision curve is produced to assess the potential clinical
+#'   utility of the risk prediction model. The decision curve reported (working
+#'   in progress!!)
+#'
 #' @return \code{\link{pred_validate}} returns an object of class
 #'   "\code{predvalidate}", with child classes per \code{model_type}. This is a
 #'   list of performance metrics, estimated by applying the existing prediction
@@ -130,6 +136,7 @@ pred_validate <- function(x,
                           event_indicator = NULL,
                           time_horizon = NULL,
                           cal_plot = TRUE,
+                          dcurve = TRUE,
                           ...) {
   UseMethod("pred_validate")
 }
@@ -142,7 +149,9 @@ pred_validate.default <- function(x,
                                   survival_time = NULL,
                                   event_indicator = NULL,
                                   time_horizon = NULL,
-                                  cal_plot = TRUE, ...) {
+                                  cal_plot = TRUE,
+                                  dcurve = TRUE,
+                                  ...) {
   stop("'x' is not of class 'predinfo'",
        call. = FALSE)
 }
@@ -156,7 +165,9 @@ pred_validate.predinfo_logistic <- function(x,
                                             survival_time = NULL,
                                             event_indicator = NULL,
                                             time_horizon = NULL,
-                                            cal_plot = TRUE, ...){
+                                            cal_plot = TRUE,
+                                            dcurve = TRUE,
+                                            ...){
 
   #Check outcomes were inputted (needed to validate the model)
   if (is.null(binary_outcome)) {
